@@ -1,0 +1,173 @@
+{
+  "name": "秦彻",
+  "version": "1.0.0",
+  "cell_width": 192,
+  "cell_height": 208,
+  "columns": 8,
+  "files": {
+    "v1": {
+      "path": "sylus-v1.png",
+      "width": 1536,
+      "height": 1872,
+      "rows": 9
+    },
+    "v2": {
+      "path": "sylus-v2.png",
+      "width": 1536,
+      "height": 2288,
+      "rows": 11
+    }
+  },
+  "states": [
+    {
+      "name": "idle",
+      "row": 0,
+      "frames": 6,
+      "duration_ms": [
+        280,
+        110,
+        110,
+        140,
+        140,
+        320
+      ]
+    },
+    {
+      "name": "running-right",
+      "row": 1,
+      "frames": 8,
+      "duration_ms": [
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        220
+      ]
+    },
+    {
+      "name": "running-left",
+      "row": 2,
+      "frames": 8,
+      "duration_ms": [
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        220
+      ]
+    },
+    {
+      "name": "waving",
+      "row": 3,
+      "frames": 4,
+      "duration_ms": [
+        140,
+        140,
+        140,
+        280
+      ]
+    },
+    {
+      "name": "jumping",
+      "row": 4,
+      "frames": 5,
+      "duration_ms": [
+        140,
+        140,
+        140,
+        140,
+        280
+      ]
+    },
+    {
+      "name": "failed",
+      "row": 5,
+      "frames": 8,
+      "duration_ms": [
+        140,
+        140,
+        140,
+        140,
+        140,
+        140,
+        140,
+        240
+      ]
+    },
+    {
+      "name": "waiting",
+      "row": 6,
+      "frames": 6,
+      "duration_ms": [
+        150,
+        150,
+        150,
+        150,
+        150,
+        260
+      ]
+    },
+    {
+      "name": "running",
+      "row": 7,
+      "frames": 6,
+      "duration_ms": [
+        120,
+        120,
+        120,
+        120,
+        120,
+        220
+      ]
+    },
+    {
+      "name": "review",
+      "row": 8,
+      "frames": 6,
+      "duration_ms": [
+        150,
+        150,
+        150,
+        150,
+        150,
+        280
+      ]
+    }
+  ],
+  "look_directions": {
+    "rows": [
+      9,
+      10
+    ],
+    "clockwise_degrees": [
+      0.0,
+      22.5,
+      45.0,
+      67.5,
+      90.0,
+      112.5,
+      135.0,
+      157.5,
+      180.0,
+      202.5,
+      225.0,
+      247.5,
+      270.0,
+      292.5,
+      315.0,
+      337.5
+    ],
+    "screen_coordinates": {
+      "0": "up",
+      "90": "right",
+      "180": "down",
+      "270": "left"
+    }
+  }
+}

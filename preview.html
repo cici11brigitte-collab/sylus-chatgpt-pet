@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>秦彻 · 桌宠预览</title>
+<style>
+:root{color-scheme:light;--silver:#ebeef0;--paper:#fafbfc;--ink:#222a32;--wine:#632535;--muted:#66717a;--rose:#e9dce0}
+*{box-sizing:border-box}body{margin:0;background:var(--silver);color:var(--ink);font:16px/1.7 -apple-system,BlinkMacSystemFont,"Microsoft YaHei",sans-serif}main{max-width:1100px;margin:5vh auto;padding:32px;display:grid;grid-template-columns:1.1fr 1fr;gap:56px;align-items:center}.stage{min-height:530px;display:flex;align-items:center;justify-content:center;background:var(--paper);border-radius:140px 140px 24px 24px;position:relative;overflow:hidden}.sprite{width:384px;height:416px;background-image:url('sylus-v2.png');background-size:3072px 4576px;background-repeat:no-repeat;flex-shrink:0}.stage-label{position:absolute;bottom:18px;left:24px;color:var(--muted);font-size:14px}h1{font:500 64px/1.1 "Songti SC",SimSun,serif;margin:0 0 20px;color:var(--wine)}p{margin:0 0 24px;color:var(--muted)}.states{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 24px}button,.download{font:inherit;cursor:pointer;border:1px solid #c6cbd0;border-radius:8px;padding:8px 14px;background:var(--paper);color:var(--ink);text-decoration:none}button:hover{border-color:var(--wine)}button[aria-pressed=true]{color:var(--paper);background:var(--wine);border-color:var(--wine)}button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid var(--wine);outline-offset:3px}.controls{display:flex;align-items:center;gap:16px;margin:12px 0}.downloads{display:flex;gap:12px;flex-wrap:wrap;margin-top:30px}.download.primary{color:var(--paper);background:var(--wine);border-color:var(--wine)}label{cursor:pointer}input{accent-color:var(--wine)}small{display:block;color:var(--muted);font-size:13px;margin-top:24px}.error{color:#7d1930}.hint{font-size:14px}.direction{width:180px}footer{max-width:1100px;margin:0 auto;padding:0 32px 30px;color:var(--muted);font-size:13px}a{color:var(--wine)}@media(max-width:750px){main{margin:0;padding:24px;grid-template-columns:1fr;gap:28px}.stage{min-height:450px;border-radius:110px 110px 20px 20px}.sprite{transform:scale(.9)}h1{font-size:46px}footer{padding:0 24px 24px}}@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto}}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<main>
+<section class="stage" id="stage" aria-label="秦彻动画预览">
+<div class="sprite" id="sprite" role="img" aria-label="秦彻站立与眨眼"></div>
+<span class="stage-label" id="status" aria-live="polite">站立与眨眼</span>
+</section>
+<section>
+<h1>秦彻</h1>
+<p>把他留在工作时的余光里。<br>选一个动作，或让他跟着你的鼠标看。</p>
+<div class="states" aria-label="动作选择" id="states">
+<button data-state="0" aria-pressed="true">站立眨眼</button><button data-state="1" aria-pressed="false">向右跑</button><button data-state="2" aria-pressed="false">向左跑</button><button data-state="3" aria-pressed="false">挥手</button><button data-state="4" aria-pressed="false">跳跃</button><button data-state="5" aria-pressed="false">低头叹气</button><button data-state="6" aria-pressed="false">等你回应</button><button data-state="7" aria-pressed="false">思考中</button><button data-state="8" aria-pressed="false">检查完成</button>
+</div>
+<div class="controls"><button id="play">暂停</button><label><input type="checkbox" id="follow"> 视线跟随鼠标</label></div>
+<div class="controls" id="look-controls" hidden><label for="direction">视线角度</label><input class="direction" id="direction" type="range" min="0" max="15" value="0"><output id="angle">0°</output></div>
+<p class="hint" id="hint">所有动作都保留同一套成熟、修长的身形。</p>
+<div class="downloads"><a class="download primary" href="sylus-v1.png" download>下载兼容版</a><a class="download" href="sylus-v2.png" download>下载完整版</a></div>
+<small>本页离线运行，无需登录。导入 ChatGPT 的方法见 <a href="USAGE.md">使用指南</a>；入口以账号和客户端实际功能为准。</small>
+</section>
+</main>
+<footer>《恋与深空》秦彻的非官方同人素材。角色及原作相关权利归原权利人。<a href="ASSET-NOTICE.md">素材声明</a></footer>
+<script>
+'use strict';
+const durations=[[280,110,110,140,140,320],[120,120,120,120,120,120,120,220],[120,120,120,120,120,120,120,220],[140,140,140,280],[140,140,140,140,280],[140,140,140,140,140,140,140,240],[150,150,150,150,150,260],[120,120,120,120,120,220],[150,150,150,150,150,280]];
+const names=['站立与眨眼','向右跑','向左跑','挥手','跳跃','低头叹气','等你回应','思考中','检查完成'];
+const sprite=document.getElementById('sprite'),status=document.getElementById('status'),play=document.getElementById('play'),follow=document.getElementById('follow'),direction=document.getElementById('direction'),angle=document.getElementById('angle'),hint=document.getElementById('hint'),lookControls=document.getElementById('look-controls');
+let state=0,frame=0,timer=null,playing=!matchMedia('(prefers-reduced-motion: reduce)').matches;
+function draw(row,col){sprite.style.backgroundPosition=`${-col*384}px ${-row*416}px`;sprite.dataset.row=row;sprite.dataset.frame=col;}
+function stop(){clearTimeout(timer);timer=null;}
+function tick(){draw(state,frame);if(playing&&!follow.checked)timer=setTimeout(()=>{frame=(frame+1)%durations[state].length;tick();},durations[state][frame]);}
+function showLook(index){index=Math.max(0,Math.min(15,Number(index)));direction.value=index;angle.value=`${index*22.5}°`;draw(9+Math.floor(index/8),index%8);sprite.setAttribute('aria-label',`秦彻视线 ${index*22.5} 度`);}
+document.getElementById('states').addEventListener('click',event=>{const button=event.target.closest('button[data-state]');if(!button)return;stop();follow.checked=false;lookControls.hidden=true;state=Number(button.dataset.state);frame=0;document.querySelectorAll('[data-state]').forEach(item=>item.setAttribute('aria-pressed',String(item===button)));status.textContent=names[state];sprite.setAttribute('aria-label',`秦彻${names[state]}`);hint.textContent='所有动作都保留同一套成熟、修长的身形。';tick();});
+play.addEventListener('click',()=>{playing=!playing;play.textContent=playing?'暂停':'播放';stop();if(!follow.checked)tick();});
+follow.addEventListener('change',()=>{stop();lookControls.hidden=!follow.checked;if(follow.checked){showLook(direction.value);status.textContent='视线跟随';hint.textContent='把鼠标移到秦彻周围，或拖动角度滑块。';}else{status.textContent=names[state];sprite.setAttribute('aria-label',`秦彻${names[state]}`);tick();}});
+direction.addEventListener('input',()=>showLook(direction.value));
+document.addEventListener('pointermove',event=>{if(!follow.checked)return;const rect=sprite.getBoundingClientRect(),x=event.clientX-(rect.left+rect.width/2),y=event.clientY-(rect.top+rect.height*.08);const radians=Math.atan2(x,-y);showLook(Math.round(((radians*180/Math.PI+360)%360)/22.5)%16);});
+const image=new Image();image.onload=()=>{if(image.naturalWidth!==1536||image.naturalHeight!==2288){stop();hint.textContent='素材尺寸不匹配，请重新下载完整版。';hint.classList.add('error');return;}tick();};image.onerror=()=>{stop();hint.textContent='未找到角色素材。请解压完整下载包，并将角色 PNG 与本页放在同一文件夹。';hint.classList.add('error');};image.src='sylus-v2.png';
+play.textContent=playing?'暂停':'播放';
+</script>
+</body>
+</html>
